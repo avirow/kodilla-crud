@@ -33,7 +33,8 @@ public class TrelloFacade {
                 .collect(Collectors.toList());
         LOGGER.info("Boards have been filtered. Current list size: " + filteredBoards.size());
 
-        return trelloMapper.mapToBoardsDto(filteredBoards);
+        List<TrelloBoard> validateBoards = trelloValidator.validateTrelloBoards(filteredBoards);
+        return trelloMapper.mapToBoardsDto(validateBoards);
     }
 
     public CreatedTrelloCardDto createCard(final TrelloCardDto trelloCardDto) {
@@ -44,6 +45,7 @@ public class TrelloFacade {
         } else {
             LOGGER.info("Seems that my application is used in proper way.");
         }
+        trelloValidator.validateCard(trelloCard);
 
         return trelloService.createTrelloCard(trelloMapper.mapToCardDto(trelloCard));
     }
